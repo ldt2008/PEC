@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/tvDate"
+        android:layout_column="0"
+        android:layout_span="2"
+        android:layout_width="match_parent"
+        android:layout_row="0"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textColor="@color/colorMaterialBlueGrey900"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorMaterialBlueGrey900" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/tvName"
+        android:layout_column="0"
+        android:layout_row="1"
+        android:textStyle="bold"
+        android:textColor="@color/colorMaterialBlueGrey800"/>
+
+    <TextView
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/tvNote"
+        android:layout_column="0"
+        android:layout_row="2"
+        android:layout_columnSpan="2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorMaterialBlueGrey800" />
+</LinearLayout>

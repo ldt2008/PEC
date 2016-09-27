@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_sub_category"
+        android:title="@string/listview_detail_menu_sub_category" />
+    <item android:id="@+id/menu_delete"
+        android:title="@string/listview_detail_menu_delete" />
+    <item android:id="@+id/menu_cancel"
+        android:title="@string/listview_detail_menu_cancel" />
+</menu>

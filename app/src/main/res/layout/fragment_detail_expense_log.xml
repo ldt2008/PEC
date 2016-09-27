@@ -1,0 +1,87 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DetailExpenseLogFragment">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            >
+
+            <DatePicker
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/dpExpenseDate"
+                android:datePickerMode="spinner"
+                android:calendarViewShown="false"
+                style="@style/pec_datePicker"
+                />
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/category"
+                android:id="@+id/spCategoryExpense"
+                android:layout_alignParentStart="true"
+
+                style="@style/pec_spinner"
+                android:layout_marginTop="10dp" />
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/sub_category"
+                android:id="@+id/spSubCategoryExpense"
+                android:layout_alignParentStart="true"
+                style="@style/pec_spinner"
+                android:layout_marginTop="10dp" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/amount"
+                android:id="@+id/tvAmountLabel"
+                style="@style/pec_label_style"
+                />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:hint="@string/amount"
+                android:id="@+id/etAmount" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/note"
+                android:id="@+id/tvNoteLabel"
+                style="@style/pec_label_style"
+                />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:hint="@string/note"
+                android:id="@+id/etNote"
+                android:layout_alignParentStart="true"
+                android:lines="2" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/save"
+                android:id="@+id/btSaveExpenseLog"
+                android:layout_marginTop="20dp"
+                android:layout_gravity="right" />
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>
