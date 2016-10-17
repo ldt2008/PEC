@@ -86,16 +86,7 @@ public class ExpenseLogFragment extends Fragment {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case R.id.menu_edit:
-                if (selectedExpenseLog != null) {
-                    DetailExpenseLogFragment detailExpenseLogFragment = DetailExpenseLogFragment.newInstance(selectedExpenseLog.getId());
-                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-
-                    fragmentManager
-                            .beginTransaction()
-                            .replace(R.id.relativeLayout_For_Fragment, detailExpenseLogFragment, detailExpenseLogFragment.getTag())
-                            .addToBackStack(null)
-                            .commit();
-                }
+                editExpenseLog();
                 return true;
             case R.id.menu_delete:
                 Log.d("Menu delete click", "Delete category");
@@ -138,6 +129,8 @@ public class ExpenseLogFragment extends Fragment {
                             view.setBackgroundColor(Color.GRAY);
 
                             Log.d("Item click", selectedExpenseLog.getSubCategory());
+
+                            editExpenseLog();
                         }
                     }
                 }
@@ -160,7 +153,19 @@ public class ExpenseLogFragment extends Fragment {
                 }
 
         );
+    }
 
+    private void editExpenseLog(){
+        if (selectedExpenseLog != null) {
+            DetailExpenseLogFragment detailExpenseLogFragment = DetailExpenseLogFragment.newInstance(selectedExpenseLog.getId());
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+
+            fragmentManager
+                    .beginTransaction()
+                    .replace(R.id.relativeLayout_For_Fragment, detailExpenseLogFragment, detailExpenseLogFragment.getTag())
+                    .addToBackStack(null)
+                    .commit();
+        }
     }
 
     private void addNewExpenseLog() {

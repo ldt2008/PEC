@@ -9,7 +9,10 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.ex.unamic.pec.models.CategoryModel;
+import com.ex.unamic.pec.models.ExpenseCategoryModel;
+import com.ex.unamic.pec.models.ExpenseDateModel;
 import com.ex.unamic.pec.models.ExpenseLogModel;
+import com.ex.unamic.pec.models.ExpenseModel;
 import com.ex.unamic.pec.models.SubCategoryModel;
 
 import java.io.FileOutputStream;
@@ -19,8 +22,11 @@ import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Unamic on 9/4/2016.
@@ -31,7 +37,7 @@ public class DataAdapter extends SQLiteOpenHelper {
 
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
 
     // Database Name
     private static final String DATABASE_NAME = "pec_db";
@@ -161,6 +167,84 @@ public class DataAdapter extends SQLiteOpenHelper {
                 + EXPENSELOG_AMOUNT + " FLOAT,"
                 + EXPENSELOG_NOTE + " TEXT" + ")";
         sqLiteDatabase.execSQL(CREATE_ExpenseLog_TABLE);
+
+        setDefaultData(sqLiteDatabase, 1);
+
+    }
+
+    private void setDefaultData(SQLiteDatabase sqLiteDatabase, int userId) {
+
+        //Set default data
+
+        long housingId = insertCategoryDefaultValue(sqLiteDatabase, new CategoryModel(0, "Housing", userId));
+        insertSubCategoryDefaultValue(sqLiteDatabase, new SubCategoryModel(0, housingId, "Rent/Mortgage"));
+        insertSubCategoryDefaultValue(sqLiteDatabase, new SubCategoryModel(0, housingId, "Gas"));
+        insertSubCategoryDefaultValue(sqLiteDatabase, new SubCategoryModel(0, housingId, "Landline Phone"));
+        insertSubCategoryDefaultValue(sqLiteDatabase, new SubCategoryModel(0, housingId, "Internet"));
+        insertSubCategoryDefaultValue(sqLiteDatabase, new SubCategoryModel(0, housingId, "Mobile Phone"));
+        insertSubCategoryDefaultValue(sqLiteDatabase, new SubCategoryModel(0, housingId, "Water"));
+        insertSubCategoryDefaultValue(sqLiteDatabase, new SubCategoryModel(0, housingId, "Electricity"));
+        insertSubCategoryDefaultValue(sqLiteDatabase, new SubCategoryModel(0, housingId, "Insurance"));
+        insertSubCategoryDefaultValue(sqLiteDatabase, new SubCategoryModel(0, housingId, "Health Insurance"));
+        insertSubCategoryDefaultValue(sqLiteDatabase, new SubCategoryModel(0, housingId, "Credit Cards"));
+
+        // daily
+        long dailyId = insertCategoryDefaultValue(sqLiteDatabase,new CategoryModel(0, "Daily", userId));
+        insertSubCategoryDefaultValue(sqLiteDatabase,new SubCategoryModel(0, dailyId, "Food"));
+        insertSubCategoryDefaultValue(sqLiteDatabase,new SubCategoryModel(0, dailyId, "Hair Cut"));
+        insertSubCategoryDefaultValue(sqLiteDatabase,new SubCategoryModel(0, dailyId, "Medication"));
+        insertSubCategoryDefaultValue(sqLiteDatabase,new SubCategoryModel(0, dailyId, "Contact Lenses"));
+        insertSubCategoryDefaultValue(sqLiteDatabase,new SubCategoryModel(0, dailyId, "Tea/Coffee"));
+        insertSubCategoryDefaultValue(sqLiteDatabase,new SubCategoryModel(0, dailyId, "Clothing"));
+        insertSubCategoryDefaultValue(sqLiteDatabase,new SubCategoryModel(0, dailyId, "Dry Cleaning"));
+        insertSubCategoryDefaultValue(sqLiteDatabase,new SubCategoryModel(0, dailyId, "Cosmetics"));
+        insertSubCategoryDefaultValue(sqLiteDatabase,new SubCategoryModel(0, dailyId, "Tuition"));
+        insertSubCategoryDefaultValue(sqLiteDatabase,new SubCategoryModel(0, dailyId, "Sweets / Candy"));
+
+        long transportId = insertCategoryDefaultValue(sqLiteDatabase,new CategoryModel(0, "Transport", userId));
+        insertSubCategoryDefaultValue(sqLiteDatabase,new SubCategoryModel(0, transportId, "Car"));
+        insertSubCategoryDefaultValue(sqLiteDatabase,new SubCategoryModel(0, transportId, "Car Insurance"));
+        insertSubCategoryDefaultValue(sqLiteDatabase,new SubCategoryModel(0, transportId, "Bus Pass"));
+        insertSubCategoryDefaultValue(sqLiteDatabase,new SubCategoryModel(0, transportId, "Subway Pass"));
+        insertSubCategoryDefaultValue(sqLiteDatabase,new SubCategoryModel(0, transportId, "Fuel"));
+        insertSubCategoryDefaultValue(sqLiteDatabase,new SubCategoryModel(0, transportId, "Car Tax"));
+        insertSubCategoryDefaultValue(sqLiteDatabase,new SubCategoryModel(0, transportId, "Rail Card"));
+        insertSubCategoryDefaultValue(sqLiteDatabase,new SubCategoryModel(0, transportId, "Car Repairs"));
+
+        long funId = insertCategoryDefaultValue(sqLiteDatabase,new CategoryModel(0, "Fun", userId));
+        insertSubCategoryDefaultValue(sqLiteDatabase,new SubCategoryModel(0, funId, "Cable"));
+        insertSubCategoryDefaultValue(sqLiteDatabase,new SubCategoryModel(0, funId, "Cinema"));
+        insertSubCategoryDefaultValue(sqLiteDatabase,new SubCategoryModel(0, funId, "Club"));
+        insertSubCategoryDefaultValue(sqLiteDatabase,new SubCategoryModel(0, funId, "DVD Purchases"));
+        insertSubCategoryDefaultValue(sqLiteDatabase,new SubCategoryModel(0, funId, "DVD Rentals"));
+        insertSubCategoryDefaultValue(sqLiteDatabase,new SubCategoryModel(0, funId, "Eating Out"));
+        insertSubCategoryDefaultValue(sqLiteDatabase,new SubCategoryModel(0, funId, "Gym"));
+        insertSubCategoryDefaultValue(sqLiteDatabase,new SubCategoryModel(0, funId, "Magazines"));
+        insertSubCategoryDefaultValue(sqLiteDatabase,new SubCategoryModel(0, funId, "Music Lessons"));
+        insertSubCategoryDefaultValue(sqLiteDatabase,new SubCategoryModel(0, funId, "Sporting Events"));
+
+
+    }
+
+    private long insertCategoryDefaultValue(SQLiteDatabase sqLiteDatabase, CategoryModel categoryModel) {
+        ContentValues values = new ContentValues();
+        values.put(CATEGORY_CATEGORY, categoryModel.getCategory());
+        values.put(CATEGORY_USER, 1);
+
+        // Inserting Row
+        long id = sqLiteDatabase.insert(TABLE_CATEGORY, null, values);
+        return id;
+    }
+
+    private long insertSubCategoryDefaultValue(SQLiteDatabase sqLiteDatabase, SubCategoryModel categoryModel) {
+        ContentValues values = new ContentValues();
+        values.put(SUBCATEGORY_CATEGORY, categoryModel.getCategory());
+        values.put(SUBCATEGORY_SUBCATEGORY, categoryModel.getSubCategory());
+
+        // Inserting Row
+        long id = sqLiteDatabase.insert(TABLE_SUBCATEGORY, null, values);
+
+        return id;
     }
 
     @Override
@@ -247,13 +331,15 @@ public class DataAdapter extends SQLiteOpenHelper {
                         CATEGORY_CATEGORY, CATEGORY_USER}, KEY_ID + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
         try {
-            if (cursor != null)
+            if (cursor != null && cursor.getCount() > 0) {
                 cursor.moveToFirst();
 
-            CategoryModel categoryModel = new CategoryModel(Integer.parseInt(cursor.getString(0)),
-                    cursor.getString(1), Long.parseLong(cursor.getString(2)));
-            // return contact
-            return categoryModel;
+                CategoryModel categoryModel = new CategoryModel(Integer.parseInt(cursor.getString(0)),
+                        cursor.getString(1), Long.parseLong(cursor.getString(2)));
+                // return contact
+                return categoryModel;
+            }
+            return null;
         } finally {
             cursor.close();
         }
@@ -442,7 +528,7 @@ public class DataAdapter extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(EXPENSELOG_USER, model.getUser());
-        values.put(EXPENSELOG_SUBCATEGORY, model.getSubCategory());
+        values.put(EXPENSELOG_SUBCATEGORY, model.getSubCategoryId());
         values.put(EXPENSELOG_DATE, model.getDate());
         values.put(EXPENSELOG_AMOUNT, model.getAmount());
         values.put(EXPENSELOG_NOTE, model.getNote());
@@ -463,8 +549,14 @@ public class DataAdapter extends SQLiteOpenHelper {
     public ExpenseLogModel getExpenseLog(long id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(TABLE_ExpenseLog, new String[]{KEY_ID,
-                        EXPENSELOG_SUBCATEGORY, EXPENSELOG_DATE, EXPENSELOG_AMOUNT, EXPENSELOG_NOTE}, KEY_ID + "=?",
+        Cursor cursor = db.query(TABLE_ExpenseLog, new String[]{
+                        KEY_ID,
+                        EXPENSELOG_USER,
+                        EXPENSELOG_SUBCATEGORY,
+                        EXPENSELOG_DATE,
+                        EXPENSELOG_AMOUNT,
+                        EXPENSELOG_NOTE
+                }, KEY_ID + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
         try {
             if (cursor != null)
@@ -479,6 +571,22 @@ public class DataAdapter extends SQLiteOpenHelper {
                     cursor.getString(5));
 
             return model;
+        } finally {
+            cursor.close();
+        }
+    }
+
+    public int countExpenseLogBySubCategory(long id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(TABLE_ExpenseLog, new String[]{
+                        KEY_ID
+                }, EXPENSELOG_SUBCATEGORY + "=?",
+                new String[]{String.valueOf(id)}, null, null, null, null);
+        try {
+            if (cursor != null)
+                return cursor.getCount();
+            return 0;
         } finally {
             cursor.close();
         }
@@ -508,19 +616,20 @@ public class DataAdapter extends SQLiteOpenHelper {
                     ExpenseLogModel model = new ExpenseLogModel();
                     model.setId(Long.parseLong(cursor.getString(0)));
                     model.setUser(Long.parseLong(cursor.getString(1)));
-                    if(cursor.getString(2) != null) {
+                    if (cursor.getString(2) != null) {
                         SubCategoryModel subCategoryModel = getSubCategory(Long.parseLong(cursor.getString(2)));
                         if (subCategoryModel != null) {
                             model.setSubCategory(subCategoryModel.getSubCategory());
                             CategoryModel categoryModel = getCategory(subCategoryModel.getCategory());
                             if (categoryModel != null) {
                                 model.setCategory(categoryModel.getCategory());
+                                model.setCategoryId(categoryModel.getId());
                             }
                         }
                         model.setSubCategoryId(Long.parseLong(cursor.getString(2)));
                     }
                     model.setDate(cursor.getString(3));
-                    if(cursor.getString(4) != null) {
+                    if (cursor.getString(4) != null) {
                         model.setAmount(Float.parseFloat(cursor.getString(4)));
                     }
                     model.setNote(cursor.getString(5));
@@ -536,4 +645,148 @@ public class DataAdapter extends SQLiteOpenHelper {
         }
     }
 
+    public List<ExpenseModel> getExpenses(long userId) {
+        List<ExpenseModel> models = new ArrayList<>();
+        List<ExpenseDateModel> expenseDateModels = getExpenseDateModelByUser(userId);
+
+        List<ExpenseCategoryModel> expenseThisDay = getTodayExpenses(userId);
+        List<String> todayCategories = new ArrayList<>();
+        ExpenseModel thisDayExpenseModel = new ExpenseModel();
+        float thisDayAmount = 0;
+        for (ExpenseCategoryModel expenseCategoryModel :
+                expenseThisDay) {
+            thisDayAmount += expenseCategoryModel.getTotalAmount();
+            todayCategories.add(String.format("%1$s - %2$s", expenseCategoryModel.getCategory(), expenseCategoryModel.getTotalAmount()));
+        }
+        if (todayCategories.size() > 0) {
+            thisDayExpenseModel.setExpenseTime("Today");
+            thisDayExpenseModel.setCategories(todayCategories);
+            thisDayExpenseModel.setTotalAmount(thisDayAmount);
+            models.add(thisDayExpenseModel);
+        }
+
+        for (ExpenseDateModel expenseDateModel : expenseDateModels) {
+            ExpenseModel expenseModel = new ExpenseModel();
+            expenseModel.setExpenseTime(expenseDateModel.getDate());
+            expenseModel.setTotalAmount(expenseDateModel.getTotalAmount());
+            List<String> categories = new ArrayList<>();
+            List<ExpenseCategoryModel> expenseCategoryModels = getExpenseCategoryByUserAndDate(userId, expenseDateModel.getDate());
+            for (ExpenseCategoryModel expenseCategoryModel :
+                    expenseCategoryModels) {
+                categories.add(String.format("%1$s - %2$s", expenseCategoryModel.getCategory(), expenseCategoryModel.getTotalAmount()));
+            }
+            expenseModel.setCategories(categories);
+            models.add(expenseModel);
+        }
+        return models;
+    }
+
+
+    public List<ExpenseDateModel> getExpenseDateModelByUser(long userId) {
+        List<ExpenseDateModel> models = new ArrayList<>();
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query = "select strftime(\"%m-%Y\",Date) as 'Month', sum(Amount) as Amount from "
+                + TABLE_ExpenseLog
+                + " where user = " + userId
+                + " group by strftime(\"%m-%Y\",Date) order by Month desc";
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        try {
+            // looping through all rows and adding to list
+            if (cursor.moveToFirst()) {
+                do {
+                    ExpenseDateModel model = new ExpenseDateModel();
+                    model.setDate(cursor.getString(0));
+                    if (cursor.getString(1) != null) {
+                        model.setTotalAmount(Float.parseFloat(cursor.getString(1)));
+                    }
+                    // Adding contact to list
+                    models.add(model);
+                } while (cursor.moveToNext());
+            }
+
+            // return contact list
+            return models;
+        } finally {
+            cursor.close();
+        }
+    }
+
+    public List<ExpenseCategoryModel> getExpenseCategoryByUserAndDate(long userId, String date) {
+        List<ExpenseCategoryModel> models = new ArrayList<>();
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query = "select c.Category, Sum(a.Amount) from "
+                + TABLE_ExpenseLog
+                + " a inner join SubCategory b on a.SubCategory = b.Id inner join Category c on b.Category = c.Id "
+                + " where strftime(\"%m-%Y\", a.Date) = '" + date + "' and "
+                + "a.user = " + userId
+                + " group by c.Id ";
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        try {
+            // looping through all rows and adding to list
+            if (cursor.moveToFirst()) {
+                do {
+                    ExpenseCategoryModel model = new ExpenseCategoryModel();
+                    model.setCategory(cursor.getString(0));
+                    if (cursor.getString(1) != null) {
+                        model.setTotalAmount(Float.parseFloat(cursor.getString(1)));
+                    }
+                    // Adding contact to list
+                    models.add(model);
+                } while (cursor.moveToNext());
+            }
+
+            // return contact list
+            return models;
+        } finally {
+            cursor.close();
+        }
+    }
+
+    public List<ExpenseCategoryModel> getTodayExpenses(long userId) {
+        List<ExpenseCategoryModel> models = new ArrayList<>();
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        String month = String.format("%02d", calendar.get(Calendar.MONTH));
+        String day = String.format("%02d", calendar.get(Calendar.DATE));
+        String nowDate = String.format("%1$s-%2$s-%3$s", year, month, day);
+
+        String query = "select c.Category, Sum(a.Amount) from "
+                + TABLE_ExpenseLog
+                + " a inner join SubCategory b on a.SubCategory = b.Id inner join Category c on b.Category = c.Id "
+                + " where strftime(\"%Y-%m-%d\", a.Date) = '" + nowDate + "' and "
+                + "a.user = " + userId
+                + " group by c.Id";
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        try {
+            // looping through all rows and adding to list
+            if (cursor.moveToFirst()) {
+                do {
+                    ExpenseCategoryModel model = new ExpenseCategoryModel();
+                    model.setCategory(cursor.getString(0));
+                    if (cursor.getString(1) != null) {
+                        model.setTotalAmount(Float.parseFloat(cursor.getString(1)));
+                    }
+                    // Adding contact to list
+                    models.add(model);
+                } while (cursor.moveToNext());
+            }
+
+            // return contact list
+            return models;
+        } finally {
+            cursor.close();
+        }
+    }
 }

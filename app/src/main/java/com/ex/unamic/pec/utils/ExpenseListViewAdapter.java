@@ -6,20 +6,23 @@ import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.ex.unamic.pec.R;
 import com.ex.unamic.pec.models.ExpenseLogModel;
+import com.ex.unamic.pec.models.ExpenseModel;
 
 import java.util.List;
 
 /**
- * Created by Unamic on 9/19/2016.
+ * Created by Unamic on 9/30/2016.
  */
-public class ExpenseLogListViewAdapter extends BaseAdapter implements View.OnClickListener {
-
+public class ExpenseListViewAdapter extends BaseAdapter implements View.OnClickListener{
     /***********
      * Declare Used Variables
      *********/
@@ -27,13 +30,13 @@ public class ExpenseLogListViewAdapter extends BaseAdapter implements View.OnCli
     private List data;
     private static LayoutInflater inflater = null;
     public Resources res;
-    ExpenseLogModel tempValues = null;
+    ExpenseModel tempValues = null;
     int i = 0;
 
     /*************
      * CustomAdapter Constructor
      *****************/
-    public ExpenseLogListViewAdapter(Activity a, List d, Resources resLocal) {
+    public ExpenseListViewAdapter(Activity a, List d, Resources resLocal) {
 
         /********** Take passed values **********/
         activity = a;
@@ -74,15 +77,17 @@ public class ExpenseLogListViewAdapter extends BaseAdapter implements View.OnCli
         if (convertView == null) {
 
             /****** Inflate tabitem.xml file for each row ( Defined below ) *******/
-            vi = inflater.inflate(R.layout.expense_log_custom_row, null);
+            vi = inflater.inflate(R.layout.expense_custom_row, null);
 
             /****** View Holder Object to contain tabitem.xml file elements ******/
 
             holder = new ViewHolder();
-            holder.tvDate = (TextView) vi.findViewById(R.id.tvDate);
-            holder.tvName = (TextView) vi.findViewById(R.id.tvName);
-            holder.tvNote = (TextView) vi.findViewById(R.id.tvNote);
-            holder.lnl_expenseLogRow = (LinearLayout) vi.findViewById(R.id.lnl_expenseLogRow);
+            holder.tvExpenseTime = (TextView) vi.findViewById(R.id.tvExpenseTime);
+            holder.tvTotalAmount = (TextView) vi.findViewById(R.id.tvTotalAmount);
+            holder.lvExpenseCategory = (ListView) vi.findViewById(R.id.lvExpenseCategory);
+            holder.lnl_expenseRow = (LinearLayout) vi.findViewById(R.id.lnl_expenseRow);
+            holder.tvNoData = (TextView) vi.findViewById(R.id.tvNoData);
+            holder.lnlContent = (LinearLayout) vi.findViewById(R.id.lnlContent);
 
             /************  Set holder with LayoutInflater ************/
             vi.setTag(holder);
@@ -90,23 +95,21 @@ public class ExpenseLogListViewAdapter extends BaseAdapter implements View.OnCli
             holder = (ViewHolder) vi.getTag();
 
         if (data.size() <= 0) {
-            holder.lnl_expenseLogRow.setVisibility(View.INVISIBLE);
+            //holder.lnl_expenseRow.setVisibility(View.INVISIBLE);
             //UtilsUI.showMessage(vi, vi.getResources(), "Please, click to new button for create first Expense log.",false, true);
 
+            holder.lnlContent.setVisibility(View.INVISIBLE);
+            holder.tvNoData.setVisibility(View.VISIBLE);
         } else {
-            /***** Get each Model object from Arraylist ********/
             tempValues = null;
-            tempValues = (ExpenseLogModel) data.get(position);
+            tempValues = (ExpenseModel) data.get(position);
 
-            /************  Set Model values in Holder elements ***********/
+            holder.tvTotalAmount.setText(String.format("%.02f", tempValues.getTotalAmount()));
+            holder.tvExpenseTime.setText(Utils.dateFormatMonthYear(tempValues.getExpenseTime()));
 
-            holder.tvDate.setText(Utils.convertDateToFullDate(tempValues.getDateDate()));
-            holder.tvName.setText(String.format("%1$s - %2$s(%3$s)",
-                    tempValues.getCategory(),
-                    tempValues.getSubCategory(),
-                    String.format("%.02f", tempValues.getAmount())));
-            holder.tvNote.setText(tempValues.getNote());
-            /******** Set Item Click Listner for LayoutInflater for each row *******/
+            ArrayAdapter adapter = new ArrayAdapter<>(vi.getContext(),android.R.layout.simple_list_item_1, tempValues.getCategories());
+            holder.lvExpenseCategory.setAdapter(adapter);
+            UtilsUI.setListViewHeightBasedOnChildren(holder.lvExpenseCategory);
         }
 
         return vi;
@@ -124,9 +127,11 @@ public class ExpenseLogListViewAdapter extends BaseAdapter implements View.OnCli
      *********/
     public static class ViewHolder {
 
-        public TextView tvDate;
-        public TextView tvName;
-        public TextView tvNote;
-        public LinearLayout lnl_expenseLogRow;
+        public TextView tvExpenseTime;
+        public TextView tvTotalAmount;
+        public ListView lvExpenseCategory;
+        public LinearLayout lnl_expenseRow;
+        public TextView tvNoData;
+        public LinearLayout lnlContent;
     }
 }

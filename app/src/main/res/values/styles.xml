@@ -21,15 +21,18 @@
         <item name="android:color">@color/colorHtmlBlack</item>
         <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
         <item name="android:layout_marginLeft">5dp</item>
-        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:width">120dp</item>
     </style>
 
     <style name="pec_spinner">
-        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+
     </style>
 
     <style name="pec_datePicker">
-        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+        <item name="android:textSize">@dimen/text_size</item>
     </style>
 
 </resources>

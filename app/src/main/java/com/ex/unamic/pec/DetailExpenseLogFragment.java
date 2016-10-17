@@ -26,6 +26,7 @@ import com.ex.unamic.pec.utils.UtilsUI;
 
 import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -94,34 +95,21 @@ public class DetailExpenseLogFragment extends Fragment {
         etAmount = (EditText) view.findViewById(R.id.etAmount);
         etNotes = (EditText) view.findViewById(R.id.etNote);
         btSave = (Button) view.findViewById(R.id.btSaveExpenseLog);
-        tvAmount = (TextView) view.findViewById(R.id.tvAmountLabel);
-        tvNote = (TextView) view.findViewById(R.id.tvNoteLabel);
 
         if (categoryModels != null) {
             fillCategory();
         }
-        if(mExpenseLogId <= 0)
-        {
-            showHideLabels(View.INVISIBLE);
-        }else {
+        if (mExpenseLogId > 0) {
             getExpenseLog();
-            showHideLabels(View.VISIBLE);
         }
 
         saveExpenseLog();
         return view;
     }
 
-    private void showHideLabels(int state)
-    {
-        tvNote.setVisibility(state);
-        tvAmount.setVisibility(state);
-    }
-
-    private void getExpenseLog(){
+    private void getExpenseLog() {
         expenseLogModel = dataAdapter.getExpenseLog(mExpenseLogId);
-        if(expenseLogModel != null)
-        {
+        if (expenseLogModel != null) {
 
             SubCategoryModel subCategoryModel = dataAdapter.getSubCategory(expenseLogModel.getSubCategoryId());
             if (subCategoryModel != null) {
@@ -133,7 +121,8 @@ public class DetailExpenseLogFragment extends Fragment {
                 }
 
                 CategoryModel categoryModel = dataAdapter.getCategory(subCategoryModel.getCategory());
-                if(categoryModel != null){
+                if (categoryModel != null) {
+                    getSubCategory(categoryModel.getId());
                     for (int i = 0; i < spinnerSubCategoryAdapter.getCount(); i++) {
                         SubCategoryModel model = spinnerSubCategoryAdapter.getItem(i);
                         if (model.getId() == categoryModel.getId()) {
@@ -144,8 +133,13 @@ public class DetailExpenseLogFragment extends Fragment {
             }
 
             Date expenseDate = Utils.convertStringToDate(expenseLogModel.getDate());
-            if(expenseDate != null) {
-                dpDate.updateDate(expenseDate.getYear(), expenseDate.getMonth(), expenseDate.getDay());
+            if (expenseDate != null) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(expenseDate);
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int day = calendar.get(Calendar.DATE);
+                dpDate.updateDate(year, month, day);
             }
 
             etAmount.setText(String.valueOf(expenseLogModel.getAmount()));
@@ -160,6 +154,7 @@ public class DetailExpenseLogFragment extends Fragment {
         spinnerCategoryAdapter = new ArrayAdapter(thisContext, android.R.layout.simple_spinner_item, categoryModels);
         spinnerCategoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spCategory.setAdapter(spinnerCategoryAdapter);
+
 
         spCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -180,9 +175,9 @@ public class DetailExpenseLogFragment extends Fragment {
 
     private void getSubCategory(long categoryId) {
         subCategoryModels = dataAdapter.getSubCategoriesByCategory(categoryId);
-        spinnerCategoryAdapter = new ArrayAdapter(thisContext, android.R.layout.simple_spinner_item, subCategoryModels);
-        spinnerCategoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spSubCategory.setAdapter(spinnerCategoryAdapter);
+        spinnerSubCategoryAdapter = new ArrayAdapter(thisContext, android.R.layout.simple_spinner_item, subCategoryModels);
+        spinnerSubCategoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spSubCategory.setAdapter(spinnerSubCategoryAdapter);
 
         spSubCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -208,23 +203,20 @@ public class DetailExpenseLogFragment extends Fragment {
                 expenseLogModel.setSubCategoryId(subCategoryModel.getId());
                 expenseLogModel.setUser(userId);
 
-                expenseLogModel.setDate(String.format("%1$s/%2$s/%3$s", dpDate.getDayOfMonth(), dpDate.getMonth()+1, dpDate.getYear()));
-                expenseLogModel.setAmount(Float.parseFloat(etAmount.getText().toString()));
+                expenseLogModel.setDate(String.format("%1$s-%2$s-%3$s", dpDate.getYear(), String.format("%02d", dpDate.getMonth() + 1), String.format("%02d", dpDate.getDayOfMonth())));
+
                 expenseLogModel.setNote(etNotes.getText().toString());
-                if(validation(expenseLogModel))
-                {
-                     if(expenseLogModel.getId() > 0)
-                     {
-                         dataAdapter.updateExpenseLog(expenseLogModel);
-                     }
-                    else {
-                         long expenseLogId = dataAdapter.addExpenseLog(expenseLogModel);
-                         expenseLogModel.setId(expenseLogId);
-                     }
-                    UtilsUI.showMessage(view, getResources(), "Saved successfully", false);
-                }
-                else {
-                    UtilsUI.showMessage(view, getResources(), "Please fill your expense log.", true);
+                if (validation(expenseLogModel)) {
+                    expenseLogModel.setAmount(Float.parseFloat(etAmount.getText().toString()));
+                    if (expenseLogModel.getId() > 0) {
+                        dataAdapter.updateExpenseLog(expenseLogModel);
+                    } else {
+                        long expenseLogId = dataAdapter.addExpenseLog(expenseLogModel);
+                        expenseLogModel.setId(expenseLogId);
+                    }
+                    UtilsUI.showMessage(view, getResources(), "Saved successfully", false, false);
+                } else {
+                    UtilsUI.showMessage(view, getResources(), "Please fill your expense log.", true, false);
                 }
             }
         });
@@ -235,7 +227,7 @@ public class DetailExpenseLogFragment extends Fragment {
         if (model.getSubCategoryId() <= 0) {
             state = false;
         }
-        if (model.getAmount() <= 0) {
+        if (etAmount.getText().toString().length() <= 0) {
             state = false;
         }
         if (Objects.equals(model.getDate().trim(), "")) {

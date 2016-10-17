@@ -171,7 +171,7 @@ public class CategoryDetailFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Object listItem = lvSubCategory.getItemAtPosition(position);
-                if(subCategoryModels.size() > 0) {
+                if (subCategoryModels.size() > 0) {
                     selectedSubCategory = (SubCategoryModel) listItem;
 
                     etSubCategory.setText(selectedSubCategory.getSubCategory());
@@ -191,7 +191,7 @@ public class CategoryDetailFragment extends Fragment {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Integer index = i;
-                if(subCategoryModels.size() > 0) {
+                if (subCategoryModels.size() > 0) {
                     Log.d("Item long click", index.toString());
 
                     Object listItem = lvSubCategory.getItemAtPosition(i);
@@ -228,10 +228,10 @@ public class CategoryDetailFragment extends Fragment {
                         selectedSubCategory.setId(categoryId);
                         subCategoryModels.add(selectedSubCategory);
 
-                        UtilsUI.showMessage(view, getResources(), "Saved successfully", true);
+                        UtilsUI.showMessage(view, getResources(), "Saved successfully", true, false);
                     }
                 } else {
-                    UtilsUI.showMessage(view, getResources(), "Your category not be blank.", true);
+                    UtilsUI.showMessage(view, getResources(), "Your category not be blank.", true, false);
                 }
 
                 updateCategoryBehavior();
@@ -250,14 +250,18 @@ public class CategoryDetailFragment extends Fragment {
     }
 
     private void deleteSubCategory() {
-        if (selectedSubCategory == detailsSubCategory) {
-            updateCategoryBehavior();
-        }
-        dataAdapter.deleteSubCategory(detailsSubCategory.getId());
-        subCategoryModels.remove(detailsSubCategory);
-        detailsSubCategory = null;
+        if (deleteValidation()) {
+            if (selectedSubCategory == detailsSubCategory) {
+                updateCategoryBehavior();
+            }
+            dataAdapter.deleteSubCategory(detailsSubCategory.getId());
+            subCategoryModels.remove(detailsSubCategory);
+            detailsSubCategory = null;
 
-        categoryAdapter.notifyDataSetChanged();
+            categoryAdapter.notifyDataSetChanged();
+        } else {
+            UtilsUI.showMessage(thisView, getResources(), "There are expense logs in this sub category.", true, false);
+        }
     }
 
     private boolean validation(SubCategoryModel model) {
@@ -266,6 +270,17 @@ public class CategoryDetailFragment extends Fragment {
             state = false;
         }
         return state;
+    }
+
+    private boolean deleteValidation() {
+
+        if (detailsSubCategory != null) {
+            int count = dataAdapter.countExpenseLogBySubCategory(detailsSubCategory.getId());
+            if (count > 0) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private void touchAndScrollCategory() {
@@ -293,7 +308,7 @@ public class CategoryDetailFragment extends Fragment {
                                 setCategory(categories.get(categoryPosition + 1).getId());
                             }
                         }
-                        if (initialY > finalY +100) {
+                        if (initialY > finalY + 100) {
                             Log.d("motionEvent", "Down to Up swipe performed");
                             if (categoryPosition > 0) {
                                 setCategory(categories.get(categoryPosition - 1).getId());
@@ -307,4 +322,6 @@ public class CategoryDetailFragment extends Fragment {
             }
         });
     }
+
+
 }

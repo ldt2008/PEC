@@ -3,8 +3,9 @@
     <color name="colorPrimary">#3f51b5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#b53f65</color>
-    <color name="colorMessage">#3F51B5</color>
-    <color name="colorErrorMessage">#b53f65</color>
+    <color name="colorMessage">#2E7D32</color>
+    <color name="colorErrorMessage">#c62828</color>
+    <color name="colorWarningMessage">#EF6C00</color>
 
 
     <color name="colorMaterialRed">#f44336</color>
@@ -161,9 +162,9 @@
     <color name="colorMaterialTealA700">#00B8D4 </color>
 
 
-    <color name="colorMaterialGreen">#4CAF50</color>
+    <color name="colorMaterialGreen">#4caf50</color>
     <color name="colorMaterialGreen50">#E8F5E9 </color>
-    <color name="colorMaterialGreen100">#C8E6C9 </color>
+    <color name="colorMaterialGreen100">#c8e6c9</color>
     <color name="colorMaterialGreen200">#A5D6A7 </color>
     <color name="colorMaterialGreen300">#81C784 </color>
     <color name="colorMaterialGreen400">#66BB6A </color>
@@ -171,7 +172,7 @@
     <color name="colorMaterialGreen600">#43A047 </color>
     <color name="colorMaterialGreen700">#388E3C </color>
     <color name="colorMaterialGreen800">#2E7D32 </color>
-    <color name="colorMaterialGreen900">#1B5E20 </color>
+    <color name="colorMaterialGreen900">#1b5e20</color>
     <color name="colorMaterialGreenA100">#B9F6CA </color>
     <color name="colorMaterialGreenA200">#69F0AE </color>
     <color name="colorMaterialGreenA400">#00E676 </color>
@@ -296,7 +297,7 @@
     <color name="colorMaterialGrey500">#9E9E9E </color>
     <color name="colorMaterialGrey600">#757575 </color>
     <color name="colorMaterialGrey700">#616161 </color>
-    <color name="colorMaterialGrey800">#424242 </color>
+    <color name="colorMaterialGrey800">#424242</color>
     <color name="colorMaterialGrey900">#212121 </color>
 
     <color name="colorMaterialBlueGrey">#607D8B</color>

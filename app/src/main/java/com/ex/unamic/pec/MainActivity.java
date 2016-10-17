@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity
 
         try {
             CreateDefaultData();
+            loadDashboard();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -78,6 +79,7 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            loadSetting();
             return true;
         }
 
@@ -92,31 +94,45 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_expense_log) {
             loadExpenseLog();
-        } else if (id == R.id.nav_gallery) {
-
         } else if (id == R.id.nav_manage) {
             loadCategory();
+        } else if (id == R.id.nav_dashboard) {
+            loadDashboard();
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    public void loadCategory() {
+    private void loadDashboard() {
+        DashboardFragment dashboardFragment = new DashboardFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.relativeLayout_For_Fragment, dashboardFragment, dashboardFragment.getTag())
+                .commit();
+    }
+
+    private void loadCategory() {
         CategoryFragment categoryFragment = new CategoryFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.relativeLayout_For_Fragment, categoryFragment, categoryFragment.getTag())
-                .addToBackStack(null)
                 .commit();
     }
 
-    private void loadExpenseLog(){
+    private void loadExpenseLog() {
         ExpenseLogFragment expenseLogFragment = new ExpenseLogFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.relativeLayout_For_Fragment, expenseLogFragment, expenseLogFragment.getTag())
-                .addToBackStack(null)
+                .commit();
+    }
+
+    private void loadSetting() {
+        SetingFragment setingFragment = new SetingFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.relativeLayout_For_Fragment, setingFragment, setingFragment.getTag())
                 .commit();
     }
 }

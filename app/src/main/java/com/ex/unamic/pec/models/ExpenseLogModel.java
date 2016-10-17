@@ -17,6 +17,7 @@ public class ExpenseLogModel {
     long User;
     long SubCategoryId;
     String SubCategory;
+    long CategoryId;
     String Category;
     String LogDate;
     float Amount;
@@ -31,6 +32,7 @@ public class ExpenseLogModel {
         LogDate = logDate;
         Amount = amount;
         Note = note;
+        User = user;
     }
 
     public long getId() {
@@ -63,6 +65,14 @@ public class ExpenseLogModel {
 
     public void setSubCategory(String subCategory) {
         SubCategory = subCategory;
+    }
+
+    public long getCategoryId() {
+        return SubCategoryId;
+    }
+
+    public void setCategoryId(long categoryId) {
+        CategoryId = categoryId;
     }
 
     public String getCategory() {

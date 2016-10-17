@@ -14,58 +14,85 @@
             android:layout_alignParentStart="true"
             >
 
-            <DatePicker
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/dpExpenseDate"
-                android:datePickerMode="spinner"
-                android:calendarViewShown="false"
-                style="@style/pec_datePicker"
-                />
-
-            <Spinner
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/category"
-                android:id="@+id/spCategoryExpense"
-                android:layout_alignParentStart="true"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Date"
+                    android:id="@+id/textView2"
+                    style="@style/pec_label_style"/>
 
-                style="@style/pec_spinner"
-                android:layout_marginTop="10dp" />
+                <DatePicker
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/dpExpenseDate"
+                    android:datePickerMode="calendar"
+                    android:calendarViewShown="false"
+                    style="@style/pec_datePicker"
+                    android:layout_gravity="center" />
+            </LinearLayout>
 
-            <Spinner
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/sub_category"
-                android:id="@+id/spSubCategoryExpense"
-                android:layout_alignParentStart="true"
-                style="@style/pec_spinner"
-                android:layout_marginTop="10dp" />
+                android:layout_marginTop="10dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Category"
+                    style="@style/pec_label_style" />
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/category"
+                    android:id="@+id/spCategoryExpense"
+                    android:layout_alignParentStart="true"
+                    style="@style/pec_spinner"
+                    />
+            </LinearLayout>
 
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/amount"
-                android:id="@+id/tvAmountLabel"
-                style="@style/pec_label_style"
-                />
-
-            <EditText
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
-                android:hint="@string/amount"
-                android:id="@+id/etAmount" />
+                android:layout_marginTop="10dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sub category"
+                    style="@style/pec_label_style" />
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/sub_category"
+                    android:id="@+id/spSubCategoryExpense"
+                    style="@style/pec_spinner" />
+            </LinearLayout>
 
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/note"
-                android:id="@+id/tvNoteLabel"
-                style="@style/pec_label_style"
-                />
+                android:layout_marginTop="10dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Amount"
+                    style="@style/pec_label_style" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:id="@+id/etAmount" />
+            </LinearLayout>
+
+
+
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -73,7 +100,8 @@
                 android:hint="@string/note"
                 android:id="@+id/etNote"
                 android:layout_alignParentStart="true"
-                android:lines="2" />
+                android:lines="2"
+                android:layout_marginTop="10dp" />
 
             <Button
                 android:layout_width="wrap_content"
